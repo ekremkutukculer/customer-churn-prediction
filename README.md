@@ -4,7 +4,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Competition-20BEFF?logo=kaggle&logoColor=white)](https://www.kaggle.com/competitions/playground-series-s6e3)
 
-Advanced ensemble ML pipeline for predicting customer churn on the Telco Customer Churn dataset (594K samples). Progressive pipeline evolution from simple baseline to champion-level solution achieving **~0.88 AUC**.
+Advanced ensemble ML pipeline for predicting customer churn on the Telco Customer Churn dataset (594K samples). Progressive pipeline evolution from simple baseline to champion-level stacking solution.
+
+**Kaggle LB: 0.91587 AUC | #315 | OOF CV: 0.91745**
 
 ## Architecture
 
@@ -40,23 +42,32 @@ flowchart TD
 
 ## Pipeline Versions
 
-| Version | Key Innovation | AUC |
-|---------|---------------|-----|
-| **Simple** | Ridge stacking with 6 base models | ~0.860 |
-| **v4** | 10-fold CV, multi-seed, Optuna tuning | ~0.868 |
-| **v5** | PyTorch MLP, pseudo-labeling, feature diversity | ~0.873 |
-| **v6** | 7 feature representations, 28+ OOF models, Ridge meta | ~0.878 |
-| **v7** | Genetic programming, Denoising VAE, 10 representations | ~0.883 |
+| Version | Key Innovation | CV AUC | LB AUC |
+|---------|---------------|--------|--------|
+| **Simple** | Ridge stacking with 6 base models | ~0.860 | — |
+| **v4** | 10-fold CV, multi-seed, Optuna tuning | ~0.868 | — |
+| **v5** | PyTorch MLP, pseudo-labeling, feature diversity | ~0.873 | — |
+| **v6** | 7 feature representations, 28+ OOF models, Ridge meta | ~0.878 | — |
+| **v7** | GP + VAE + 10 representations + 69 OOF pool | 0.917 | — |
+| **v7-light** | v7 without GP/VAE, 28/69 OOF selected, pseudo-labeling | **0.91745** | **0.91587** |
+
+## Final Results (v7-light on Kaggle)
+
+- **69 OOF models** generated across 5 model families (XGBoost, LightGBM, CatBoost, HGB, MLP)
+- **Optuna** selected 28/69 best OOF subset (500 trials)
+- **Ridge meta-stacking** (alpha=50) achieved 0.91745 CV AUC
+- **Pseudo-labeling** applied to top 3 digit-representation models (29.7% of test data)
+- **Leaderboard**: #315 with 0.91587 public AUC
 
 ## Key Techniques
 
-- **Multi-Representation Learning** — 10 different feature views of the same data
-- **OOF Pooling & Selection** — Generate 50+ predictions, select best combo via Optuna
+- **Multi-Representation Learning** — 8 different feature views of the same data
+- **OOF Pooling & Selection** — Generate 69 predictions, select best 28 via Optuna
 - **Ridge Stacking** — Robust meta-model that beats complex alternatives
-- **Full-Data Retraining** — 20-seed averaged predictions after OOF selection
+- **Full-Data Retraining** — 2-seed averaged predictions after OOF selection
 - **KFold-Safe Pipelines** — All feature engineering respects fold splits
-- **Genetic Programming** — Evolve symbolic features with gplearn
-- **Denoising VAE** — Extract latent representations with PyTorch autoencoder
+- **Genetic Programming** — Evolve symbolic features with gplearn (v7 full)
+- **Denoising VAE** — Extract latent representations with PyTorch autoencoder (v7 full)
 - **Pseudo-Labeling** — Semi-supervised boost with high-confidence predictions
 
 ## Quick Start
