@@ -84,7 +84,7 @@ pip install -r requirements.txt
 # Place train.csv, test.csv, sample_submission.csv in data/
 
 # Run the champion pipeline
-python kaggle_churn_v7.py
+python kaggle_churn_v7_light.py
 ```
 
 ## Feature Engineering
@@ -132,12 +132,7 @@ python kaggle_churn_v7.py
 ## Project Structure
 
 ```
-├── kaggle_churn_simple.py    # Baseline — Ridge stacking
-├── kaggle_churn_v4.py        # Multi-seed + Optuna tuning
-├── kaggle_churn_v5.py        # + MLP + pseudo-labeling
-├── kaggle_churn_v6.py        # + 7 representations + OOF selection
-├── kaggle_churn_v7.py        # + Genetic programming + VAE (champion)
-├── kaggle_churn_v7_light.py  # Lightweight v7 (5x faster)
+├── kaggle_churn_v7_light.py  # Champion pipeline (0.91587 LB)
 ├── data/                     # Kaggle dataset (gitignored)
 ├── requirements.txt
 └── LICENSE
