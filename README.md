@@ -84,7 +84,7 @@ pip install -r requirements.txt
 # Place train.csv, test.csv, sample_submission.csv in data/
 
 # Run the champion pipeline
-python kaggle_churn_v7_light.py
+python kaggle_churn.py
 ```
 
 ## Feature Engineering
@@ -132,7 +132,7 @@ python kaggle_churn_v7_light.py
 ## Project Structure
 
 ```
-├── kaggle_churn_v7_light.py  # Champion pipeline (0.91587 LB)
+├── kaggle_churn.py  # Champion pipeline (0.91587 LB)
 ├── data/                     # Kaggle dataset (gitignored)
 ├── requirements.txt
 └── LICENSE
